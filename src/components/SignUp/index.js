@@ -50,12 +50,16 @@ class SignUpFormBase extends Component {
       .doCreateUserWithEmailAndPassword(email, passwordOne)
       .then(authUser => {
         // Create a user in your Firebase realtime database
-        console.log(this.props.firebase);
+        console.log("this.props.firebase", this.props.firebase);
         return this.props.firebase.user(authUser.user.uid).set({
           username,
           email,
           roles,
-        });
+        },
+        {
+          merge: true
+        }, 
+      );
       })
       .then(() => {
         return this.props.firebase.doSendEmailVerification();
@@ -154,5 +158,6 @@ const SignUpLink = () => (
   </p>
 );
 const SignUpForm = withRouter(withFirebase(SignUpFormBase));
+
 export default SignUpPage;
 export { SignUpForm, SignUpLink };
